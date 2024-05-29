@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-check-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: health-check-service
+  template:
+    metadata:
+      labels:
+        app: health-check-service
+    spec:
+      containers:
+      - name: health-check-service
+        image: your-docker-repo/health-check-service:latest
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-check-service
+spec:
+  selector:
+    app: health-check-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
